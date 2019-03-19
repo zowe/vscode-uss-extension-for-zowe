@@ -1,0 +1,15 @@
+__mocks__/**
+__tests__/**
+.vscode/**
+.vscode-test/**
+out/__tests__/**
+out/resources/testProfileData.*
+out/**/*.map
+resources/testProfileData.ts
+results/**
+src/**
+.gitignore
+tsconfig.json
+tslint.json
+*.vsix
+.history

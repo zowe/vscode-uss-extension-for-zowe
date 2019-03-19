@@ -1,0 +1,208 @@
+{
+  "name": "vscode-extension-for-zowe",
+  "displayName": "Zowe",
+  "description": "VS Code extension, powered by Zowe CLI, that streamlines interaction with mainframe data sets",
+  "version": "1.0.2",
+  "publisher": "Zowe",
+  "repository": {
+    "url": "https://github.com/zowe/vscode-extension-for-zowe"
+  },
+  "icon": "resources/zowe_logo.png",
+  "keywords": [
+    "mainframe",
+    "uss",
+    "zowe"
+  ],
+  "engines": {
+    "vscode": "^1.26.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "files": [
+    "out",
+    "README.md",
+    "resources"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./out/src/extension",
+  "contributes": {
+    "views": {
+      "explorer": [
+        {
+          "id": "zowe.explorer",
+          "name": "Unix System Services (USS)"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "zowe.addSession",
+        "title": "Zowe: Add Profile",
+        "icon": {
+          "light": "./resources/light/plus.svg",
+          "dark": "./resources/dark/plus.svg"
+        }
+      },
+      {
+        "command": "zowe.create New Directory",
+        "title": "Create New Directory",
+        "icon": {
+          "light": "./resources/light/newfile.svg",
+          "dark": "./resources/dark/newfile.svg"
+        }
+      },
+      {
+        "command": "zowe.pattern",
+        "title": "Search Unix System Services (USS) by Entering a Path",
+        "icon": {
+          "light": "./resources/light/pattern.svg",
+          "dark": "./resources/dark/pattern.svg"
+        }
+      },
+      {
+        "command": "zowe.refreshAll",
+        "title": "Zowe: Refresh All",
+        "icon": {
+          "light": "./resources/light/refresh.svg",
+          "dark": "./resources/dark/refresh.svg"
+        }
+      },
+      {
+        "command": "zowe.refreshNode",
+        "title": "Pull from Mainframe",
+        "icon": {
+          "light": "./resources/light/download.svg",
+          "dark": "./resources/dark/download.svg"
+        }
+      },
+      {
+        "command": "zowe.removeSession",
+        "title": "Remove Profile"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "when": "view == zowe.explorer",
+          "command": "zowe.refreshAll",
+          "group": "navigation"
+        },
+        {
+          "when": "view == zowe.explorer",
+          "command": "zowe.addSession",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "when": "viewItem == ds",
+          "command": "zowe.refreshNode",
+          "group": "inline"
+        },
+        {
+          "when": "viewItem == dsf",
+          "command": "zowe.refreshNode",
+          "group": "inline"
+        },
+        {
+          "when": "viewItem == session",
+          "command": "zowe.pattern",
+          "group": "inline"
+        },
+        {
+          "when": "viewItem == session",
+          "command": "zowe.removeSession"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "zowe.pattern",
+          "when": "never"
+        },
+        {
+          "command": "zowe.refreshNode",
+          "when": "never"
+        },
+        {
+          "command": "zowe.removeSession",
+          "when": "never"
+        }
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "Zowe Configuration",
+      "properties": {}
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "npm run license && tsc --pretty",
+    "watch": "tsc -watch --pretty",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test:unit": "jest --coverage",
+    "test": "jest --coverage",
+    "package": "vsce package",
+    "license": "node ./scripts/license.js"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.4",
+    "@types/chai-as-promised": "^7.1.0",
+    "@types/expect": "^1.20.3",
+    "@types/jest": "^23.1.0",
+    "@types/mocha": "^2.2.42",
+    "@types/node": "^7.10.5",
+    "@types/yargs": "^11.0.0",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "chalk": "^2.4.1",
+    "expect": "^23.4.0",
+    "glob": "^7.1.2",
+    "jest": "^22.4.4",
+    "jest-html-reporter": "^2.5.0",
+    "jsdom": "11.11.0",
+    "sinon": "^6.1.0",
+    "ts-jest": "^22.4.6",
+    "typescript": "^2.9.2",
+    "vsce": "^1.58.0"
+  },
+  "dependencies": {
+    "@brightside/core": "^2.9.0",
+    "@brightside/imperative": "^2.0.0",
+    "jsdoc": "^3.5.5",
+    "vscode": "^1.1.30"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "tsx"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "tsconfig.json"
+      }
+    },
+    "testMatch": [
+      "**/__tests__/*test.+(ts|tsx)"
+    ],
+    "modulePathIgnorePatterns": [
+      "__tests__/integrationTests/"
+    ],
+    "reporters": [
+      "default",
+      "./node_modules/jest-html-reporter"
+    ],
+    "coverageDirectory": "<rootDir>/results/coverage"
+  },
+  "jest-html-reporter": {
+    "pageTitle": "Zowe Extension Tests",
+    "outputPath": "results/results.html"
+  }
+}

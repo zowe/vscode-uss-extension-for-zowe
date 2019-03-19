@@ -1,0 +1,10 @@
+node_modules
+out
+logs
+resources/temp
+resources/testProfileData.ts
+results
+debug.log
+package-lock.json
+vscode-extension-for-zowe*.vsix
+.history/
