@@ -192,7 +192,7 @@
     "coverageDirectory": "<rootDir>/results/coverage"
   },
   "jest-html-reporter": {
-    "pageTitle": "Zowe VSCOde USS Extension Tests",
+    "pageTitle": "Zowe VSCode USS Extension Tests",
     "outputPath": "results/results.html"
   }
 }

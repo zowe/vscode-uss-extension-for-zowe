@@ -20,7 +20,7 @@ After you install the Zowe extension, meet the following prerequisites:
 
 * [Install Zowe CLI](https://zowe.github.io/docs-site/latest/user-guide/cli-installcli.html) on your PC.
   
-    **Important!** To use the VSC Extension for Zowe, you must install Zowe CLI version `2.0.0` or later.
+    **Important!** To use the VSC Extension for Zowe, you must install Zowe CLI version `2.14.0` or later.
 * [Create at least one Zowe CLI 'zosmf' profile](https://zowe.github.io/docs-site/latest/getting-started/cli-getting-started.html#using-profiles).
 
 ## Configuration and usage tips
