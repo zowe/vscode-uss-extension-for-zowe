@@ -36,7 +36,7 @@ describe("Extension Unit Tests", async () => {
     });
 
     const sessNode = new ZoweNode("sestest", vscode.TreeItemCollapsibleState.Expanded, null, session, null);
-    sessNode.contextValue = "session";
+    sessNode.contextValue = "uss_session";
     sessNode.pattern = "/u/myuser";
 
     const mkdirSync = jest.fn();
@@ -184,21 +184,21 @@ describe("Extension Unit Tests", async () => {
         expect(mkdirSync.mock.calls.length).toBe(1);
         createTreeView.mockReturnValueOnce("testDisposable");
         expect(createTreeView.mock.calls.length).toBe(1);
-        expect(createTreeView.mock.calls[0][0]).toBe("zowe.explorer");
+        expect(createTreeView.mock.calls[0][0]).toBe("zowe.uss.explorer");
 
         // vscode commands section
         expect(registerCommand.mock.calls.length).toBe(6);
-        expect(registerCommand.mock.calls[0][0]).toBe("zowe.addSession");
+        expect(registerCommand.mock.calls[0][0]).toBe("zowe.uss.addSession");
         expect(registerCommand.mock.calls[0][1]).toBeInstanceOf(Function);
-        expect(registerCommand.mock.calls[1][0]).toBe("zowe.refreshAll");
+        expect(registerCommand.mock.calls[1][0]).toBe("zowe.uss.refreshAll");
         expect(registerCommand.mock.calls[1][1]).toBeInstanceOf(Function);
-        expect(registerCommand.mock.calls[2][0]).toBe("zowe.refreshNode");
+        expect(registerCommand.mock.calls[2][0]).toBe("zowe.uss.refreshNode");
         expect(registerCommand.mock.calls[2][1]).toBeInstanceOf(Function);
-        expect(registerCommand.mock.calls[3][0]).toBe("zowe.pattern");
+        expect(registerCommand.mock.calls[3][0]).toBe("zowe.uss.pattern");
         expect(registerCommand.mock.calls[3][1]).toBeInstanceOf(Function);
-        expect(registerCommand.mock.calls[4][0]).toBe("zowe.ZoweNode.open");
+        expect(registerCommand.mock.calls[4][0]).toBe("zowe.uss.ZoweNode.open");
         expect(registerCommand.mock.calls[4][1]).toBeInstanceOf(Function);
-        expect(registerCommand.mock.calls[5][0]).toBe("zowe.removeSession");
+        expect(registerCommand.mock.calls[5][0]).toBe("zowe.uss.removeSession");
         expect(registerCommand.mock.calls[5][1]).toBeInstanceOf(Function);
         expect(showErrorMessage.mock.calls.length).toBe(0);
 
@@ -382,7 +382,7 @@ describe("Extension Unit Tests", async () => {
 
         const node = new ZoweNode("node", vscode.TreeItemCollapsibleState.None, sessNode, null, null);
         node.pattern = "/u/test";
-        node.contextValue = "session";
+        node.contextValue = "uss_session";
 
         showInputBox.mockReturnValueOnce("/u/test");
         await extension.enterPattern(node, testTree);

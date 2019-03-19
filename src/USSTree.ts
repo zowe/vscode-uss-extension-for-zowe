@@ -98,7 +98,7 @@ export class USSTree implements vscode.TreeDataProvider<ZoweNode> {
 
         // Creates ZoweNode to track new session and pushes it to mSessionNodes
         const node = new ZoweNode(zosmfProfile.name, vscode.TreeItemCollapsibleState.Collapsed, null, session, "");
-        node.contextValue = "session";
+        node.contextValue = "uss_session";
         this.mSessionNodes.push(node);
         this.refresh();
     }

@@ -36,7 +36,7 @@ describe("Extension Integration Tests", () => {
 
     const session = zowe.ZosmfSession.createBasicZosmfSession(testConst.profile);
     const sessionNode = new ZoweNode(testConst.profile.name, vscode.TreeItemCollapsibleState.Expanded, null, session, null);
-    sessionNode.contextValue = "session";
+    sessionNode.contextValue = "uss_session";
     const pattern = testConst.normalPattern;
     sessionNode.pattern = pattern;
     const testTree = new USSTree();
@@ -61,7 +61,7 @@ describe("Extension Integration Tests", () => {
             const ussFileProvider = new USSTree();
 
             // Create the TreeView using ussFileProvider to create tree structure
-            const testTreeView = vscode.window.createTreeView("zowe.explorer", {treeDataProvider: ussFileProvider});
+            const testTreeView = vscode.window.createTreeView("zowe.uss.explorer", {treeDataProvider: ussFileProvider});
 
             const allNodes = await getAllNodes(ussFileProvider.mSessionNodes);
             for (const node of allNodes) {
@@ -125,7 +125,7 @@ describe("Extension Integration Tests", () => {
             expect(testTree.mSessionNodes[0].tooltip).to.equal(pattern);
             expect(testTree.mSessionNodes[0].collapsibleState).to.equal(vscode.TreeItemCollapsibleState.Expanded);
 
-            const testTreeView = vscode.window.createTreeView("zowe.explorer", {treeDataProvider: testTree});
+            const testTreeView = vscode.window.createTreeView("zowe.uss.explorer", {treeDataProvider: testTree});
 
             const childrenFromTree = await sessionNode.getChildren();
             childrenFromTree.unshift(...(await childrenFromTree[0].getChildren()));

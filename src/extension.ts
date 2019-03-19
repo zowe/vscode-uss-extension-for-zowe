@@ -51,15 +51,15 @@ export async function activate(context: vscode.ExtensionContext) {
     }
 
     // Attaches the TreeView as a subscriber to the refresh event of ussFileProvider
-    const disposable = vscode.window.createTreeView("zowe.explorer", {treeDataProvider: ussFileProvider});
+    const disposable = vscode.window.createTreeView("zowe.uss.explorer", {treeDataProvider: ussFileProvider});
     context.subscriptions.push(disposable);
 
-    vscode.commands.registerCommand("zowe.addSession", async () => addSession(ussFileProvider));
-    vscode.commands.registerCommand("zowe.refreshAll", () => refreshAll(ussFileProvider));
-    vscode.commands.registerCommand("zowe.refreshNode", (node) => refreshPS(node));
-    vscode.commands.registerCommand("zowe.pattern", (node) => enterPattern(node, ussFileProvider));
-    vscode.commands.registerCommand("zowe.ZoweNode.open", (node) => open(node));
-    vscode.commands.registerCommand("zowe.removeSession", async (node) => ussFileProvider.deleteSession(node));
+    vscode.commands.registerCommand("zowe.uss.addSession", async () => addSession(ussFileProvider));
+    vscode.commands.registerCommand("zowe.uss.refreshAll", () => refreshAll(ussFileProvider));
+    vscode.commands.registerCommand("zowe.uss.refreshNode", (node) => refreshPS(node));
+    vscode.commands.registerCommand("zowe.uss.pattern", (node) => enterPattern(node, ussFileProvider));
+    vscode.commands.registerCommand("zowe.uss.ZoweNode.open", (node) => open(node));
+    vscode.commands.registerCommand("zowe.uss.removeSession", async (node) => ussFileProvider.deleteSession(node));
 }
 
 
@@ -208,7 +208,7 @@ export async function open(node: ZoweNode) {
             case ("directory"):
                 label = node.pattern;
                 break;
-            case ("session"):
+            case ("uss_session"):
                 label = node.mLabel;
                 break;
             default:
@@ -252,7 +252,7 @@ export async function refreshPS(node: ZoweNode) {
         case ("directory"):
             label = node.pattern;
             break;
-        case ("session"):
+        case ("uss_session"):
             label = node.mLabel;
             break;
         default:

@@ -52,7 +52,7 @@ export class ZoweNode extends vscode.TreeItem {
      * @returns {Promise<ZoweNode[]>}
      */
     public async getChildren(): Promise<ZoweNode[]> {
-        if ((!this.pattern && this.contextValue === "session") || this.contextValue === "file") {
+        if ((!this.pattern && this.contextValue === "uss_session") || this.contextValue === "file") {
             return [];
         }
 
@@ -94,14 +94,14 @@ export class ZoweNode extends vscode.TreeItem {
                     } else {
                         // Creates a ZoweNode for a file
                         const temp = new ZoweNode(item.name, vscode.TreeItemCollapsibleState.None, this, this.session, this.pattern);
-                        temp.command = {command: "zowe.ZoweNode.open", title: "Open", arguments: [temp]};
+                        temp.command = {command: "zowe.uss.ZoweNode.open", title: "Open", arguments: [temp]};
                         elementChildren[temp.label] = temp;
                     }
                 }
             }
         });
 
-        if (this.contextValue === "session") {
+        if (this.contextValue === "uss_session") {
             this.dirty = false;
         }
         return this.children = Object.keys(elementChildren).sort().map((labels) => elementChildren[labels]);
