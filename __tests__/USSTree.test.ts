@@ -30,14 +30,14 @@ describe("Unit Tests (Jest)", async () => {
     });
     const testTree = new USSTree();
     testTree.mSessionNodes.push(new ZoweNode("testSess", vscode.TreeItemCollapsibleState.Collapsed, null, session, null));
-    testTree.mSessionNodes[0].contextValue = "session";
+    testTree.mSessionNodes[0].contextValue = "uss_session";
     testTree.mSessionNodes[0].pattern = "test";
     /*************************************************************************************************************
      * Creates an ZoweNode and checks that its members are all initialized by the constructor
      *************************************************************************************************************/
     it("Testing that the ZoweNode is defined", async () => {
         const testNode = new ZoweNode("/u", vscode.TreeItemCollapsibleState.None, null, session,null);
-        testNode.contextValue = "session";
+        testNode.contextValue = "uss_session";
 
         expect(testNode.label).toBeDefined();
         expect(testNode.collapsibleState).toBeDefined();
@@ -72,7 +72,7 @@ describe("Unit Tests (Jest)", async () => {
         const sessNode = [
             new ZoweNode("testSess", vscode.TreeItemCollapsibleState.Collapsed, null, session, null),
         ];
-        sessNode[0].contextValue = "session";
+        sessNode[0].contextValue = "uss_session";
         sessNode[0].pattern = "test";
 
         // Checking that the rootChildren are what they are expected to be
@@ -159,11 +159,11 @@ describe("Unit Tests (Jest)", async () => {
         const sampleChildren: ZoweNode[] = [
             new ZoweNode("myFile.txt", vscode.TreeItemCollapsibleState.None, directory, null, null),
         ];
-        sampleChildren[0].command = { command: "zowe.ZoweNode.open", title: "", arguments: [sampleChildren[0]] };
+        sampleChildren[0].command = { command: "zowe.uss.ZoweNode.open", title: "", arguments: [sampleChildren[0]] };
 
         // Checking that the rootChildren are what they are expected to be
         expect(dirChildren[1].mLabel).toEqual(sampleChildren[0].mLabel);
-        //expect(dirChildren[1].command).toEqual("zowe.ZoweNode.open");
+        //expect(dirChildren[1].command).toEqual("zowe.uss.ZoweNode.open");
     });
 
     /*************************************************************************************************************

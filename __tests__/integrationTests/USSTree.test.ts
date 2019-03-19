@@ -29,7 +29,7 @@ describe("USSTree Integration Tests", async () => {
     // Uses loaded profile to create a zosmf session with brightside
     const session = zowe.ZosmfSession.createBasicZosmfSession(testConst.profile);
     const sessNode = new ZoweNode(testConst.profile.name, vscode.TreeItemCollapsibleState.Expanded, null, session, null);
-    sessNode.contextValue = "session";
+    sessNode.contextValue = "uss_session";
     const path = testConst.normalPattern;
     sessNode.pattern = path;
     const testTree = new USSTree();
@@ -71,16 +71,16 @@ describe("USSTree Integration Tests", async () => {
             new ZoweNode(path + "/group/aDir6", vscode.TreeItemCollapsibleState.Collapsed, sessNode, null, null),
         ];
 
-        sampleRChildren[0].command = {command: "zowe.ZoweNode.open", title: "", arguments: [sampleRChildren[0]]};
-        sampleRChildren[3].command = {command: "zowe.ZoweNode.open", title: "", arguments: [sampleRChildren[3]]};
+        sampleRChildren[0].command = {command: "zowe.uss.ZoweNode.open", title: "", arguments: [sampleRChildren[0]]};
+        sampleRChildren[3].command = {command: "zowe.uss.ZoweNode.open", title: "", arguments: [sampleRChildren[3]]};
 
         const samplePChildren: ZoweNode[] = [
             new ZoweNode("/aFile4.txt", vscode.TreeItemCollapsibleState.None, sampleRChildren[2], null, null),
             new ZoweNode("/aFile5.txt", vscode.TreeItemCollapsibleState.None, sampleRChildren[2], null, null),
         ];
 
-        samplePChildren[0].command = {command: "zowe.ZoweNode.open", title: "", arguments: [samplePChildren[0]]};
-        samplePChildren[1].command = {command: "zowe.ZoweNode.open", title: "", arguments: [samplePChildren[1]]};
+        samplePChildren[0].command = {command: "zowe.uss.ZoweNode.open", title: "", arguments: [samplePChildren[0]]};
+        samplePChildren[1].command = {command: "zowe.uss.ZoweNode.open", title: "", arguments: [samplePChildren[1]]};
         sampleRChildren[2].children = samplePChildren;
 
         // Checking that the rootChildren are what they are expected to be

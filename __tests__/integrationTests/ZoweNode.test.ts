@@ -26,7 +26,7 @@ describe("ZoweNode Integration Tests", async () => {
     // Uses loaded profile to create a zosmf session with brightside
     const session = zowe.ZosmfSession.createBasicZosmfSession(testConst.profile);
     const sessNode = new ZoweNode(testConst.profile.name, vscode.TreeItemCollapsibleState.Expanded, null, session,null);
-    sessNode.contextValue = "session";
+    sessNode.contextValue = "uss_session";
     const path = testConst.normalPattern;
     sessNode.pattern = path + "/group";
 
@@ -81,9 +81,9 @@ describe("ZoweNode Integration Tests", async () => {
             new ZoweNode(path + "/group/aDir6", vscode.TreeItemCollapsibleState.Collapsed, sessNode, null, null),
         ];
 
-        sampleChildren[0].command = { command: "zowe.ZoweNode.open", title: "", arguments: [sampleChildren[0]] };
+        sampleChildren[0].command = { command: "zowe.uss.ZoweNode.open", title: "", arguments: [sampleChildren[0]] };
         // tslint:disable-next-line:no-magic-numbers
-        sampleChildren[1].command = { command: "zowe.ZoweNode.open", title: "", arguments: [sampleChildren[1]] };
+        sampleChildren[1].command = { command: "zowe.uss.ZoweNode.open", title: "", arguments: [sampleChildren[1]] };
 
         // Checking that the rootChildren are what they are expected to be
         expect(sessChildren.length).toBe(4);

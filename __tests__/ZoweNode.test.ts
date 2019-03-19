@@ -33,7 +33,7 @@ describe("Unit Tests (Jest)", async () => {
      *************************************************************************************************************/
     it("Testing that the ZoweNode is defined", async () => {
         const testNode = new ZoweNode("/u", vscode.TreeItemCollapsibleState.None, null, session,null);
-        testNode.contextValue = "session";
+        testNode.contextValue = "uss_session";
 
         expect(testNode.label).toBeDefined();
         expect(testNode.collapsibleState).toBeDefined();
@@ -57,7 +57,7 @@ describe("Unit Tests (Jest)", async () => {
             new ZoweNode("myFile.txt", vscode.TreeItemCollapsibleState.None, rootNode, session, "/u"),
 
         ];
-        sampleChildren[1].command = { command: "zowe.ZoweNode.open", title: "Open", arguments: [sampleChildren[1]] };
+        sampleChildren[1].command = { command: "zowe.uss.ZoweNode.open", title: "Open", arguments: [sampleChildren[1]] };
 
         let rootChildren = await rootNode.getChildren();
         expect(rootChildren.length).toBe(2);
@@ -84,7 +84,7 @@ describe("Unit Tests (Jest)", async () => {
         "it throws an error and the catch block is reached", async () => {
             // Creating a rootNode
             const rootNode = new ZoweNode("toot", vscode.TreeItemCollapsibleState.Collapsed, null, session, "root");
-            rootNode.contextValue = "session";
+            rootNode.contextValue = "uss_session";
             rootNode.pattern = "Throw Error";
             await expect(rootNode.getChildren()).rejects.toEqual(Error("Retrieving response from zowe.List\n" +
                 "Error: Throwing an error to check error handling for unit tests!\n"));
@@ -97,7 +97,7 @@ describe("Unit Tests (Jest)", async () => {
         "it throws an error and the catch block is reached", async () => {
             // Creating a rootNode
             const rootNode = new ZoweNode("toot", vscode.TreeItemCollapsibleState.Collapsed, null, session, "root");
-            rootNode.contextValue = "session";
+            rootNode.contextValue = "uss_session";
             const subNode = new ZoweNode("Response Fail", vscode.TreeItemCollapsibleState.Collapsed, rootNode, null, null);
             subNode.pattern = "Response Fail";
             await expect(subNode.getChildren()).rejects.toEqual(Error("The response from Zowe CLI was not successful"));
@@ -109,7 +109,7 @@ describe("Unit Tests (Jest)", async () => {
     it("Checks that passing a session node that is not dirty the getChildren() method is exited early", async () => {
         // Creating a rootNode
         const rootNode = new ZoweNode("root", vscode.TreeItemCollapsibleState.Collapsed, null, session, null);
-        rootNode.contextValue = "session";
+        rootNode.contextValue = "uss_session";
         rootNode.dirty = false;
         await expect(await rootNode.getChildren()).toEqual([]);
     });
@@ -120,7 +120,7 @@ describe("Unit Tests (Jest)", async () => {
     it("Checks that passing a session node with no hlq the getChildren() method is exited early", async () => {
         // Creating a rootNode
         const rootNode = new ZoweNode("root", vscode.TreeItemCollapsibleState.Collapsed, null, session, null);
-        rootNode.contextValue = "session";
+        rootNode.contextValue = "uss_session";
         await expect(await rootNode.getChildren()).toEqual([]);
     });
 
@@ -130,7 +130,7 @@ describe("Unit Tests (Jest)", async () => {
     it("Checks that a member can reach its session properly", async () => {
         // Creating a rootNode
         const rootNode = new ZoweNode("root", vscode.TreeItemCollapsibleState.Collapsed, null, session, null);
-        rootNode.contextValue = "session";
+        rootNode.contextValue = "uss_session";
         const subNode = new ZoweNode("pds", vscode.TreeItemCollapsibleState.Collapsed, rootNode, null, null);
         const member = new ZoweNode("member", vscode.TreeItemCollapsibleState.None, subNode, null, null);
         await expect(member.getSession()).toBeDefined();

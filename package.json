@@ -32,14 +32,14 @@
     "views": {
       "explorer": [
         {
-          "id": "zowe.explorer",
+          "id": "zowe.uss.explorer",
           "name": "Unix System Services (USS)"
         }
       ]
     },
     "commands": [
       {
-        "command": "zowe.addSession",
+        "command": "zowe.uss.addSession",
         "title": "Zowe: Add Profile",
         "icon": {
           "light": "./resources/light/plus.svg",
@@ -47,7 +47,7 @@
         }
       },
       {
-        "command": "zowe.create New Directory",
+        "command": "zowe.uss.createDirectory",
         "title": "Create New Directory",
         "icon": {
           "light": "./resources/light/newfile.svg",
@@ -55,7 +55,7 @@
         }
       },
       {
-        "command": "zowe.pattern",
+        "command": "zowe.uss.pattern",
         "title": "Search Unix System Services (USS) by Entering a Path",
         "icon": {
           "light": "./resources/light/pattern.svg",
@@ -63,7 +63,7 @@
         }
       },
       {
-        "command": "zowe.refreshAll",
+        "command": "zowe.uss.refreshAll",
         "title": "Zowe: Refresh All",
         "icon": {
           "light": "./resources/light/refresh.svg",
@@ -71,7 +71,7 @@
         }
       },
       {
-        "command": "zowe.refreshNode",
+        "command": "zowe.uss.refreshNode",
         "title": "Pull from Mainframe",
         "icon": {
           "light": "./resources/light/download.svg",
@@ -79,45 +79,45 @@
         }
       },
       {
-        "command": "zowe.removeSession",
+        "command": "zowe.uss.removeSession",
         "title": "Remove Profile"
       }
     ],
     "menus": {
       "view/title": [
         {
-          "when": "view == zowe.explorer",
-          "command": "zowe.refreshAll",
+          "when": "view == zowe.uss.explorer",
+          "command": "zowe.uss.refreshAll",
           "group": "navigation"
         },
         {
-          "when": "view == zowe.explorer",
-          "command": "zowe.addSession",
+          "when": "view == zowe.uss.explorer",
+          "command": "zowe.uss.addSession",
           "group": "navigation"
         }
       ],
       "view/item/context": [
         {
-          "when": "viewItem == session",
-          "command": "zowe.pattern",
+          "when": "viewItem == uss_session",
+          "command": "zowe.uss.pattern",
           "group": "inline"
         },
         {
-          "when": "viewItem == session",
-          "command": "zowe.removeSession"
+          "when": "viewItem == uss_session",
+          "command": "zowe.uss.removeSession"
         }
       ],
       "commandPalette": [
         {
-          "command": "zowe.pattern",
+          "command": "zowe.uss.pattern",
           "when": "never"
         },
         {
-          "command": "zowe.refreshNode",
+          "command": "zowe.uss.refreshNode",
           "when": "never"
         },
         {
-          "command": "zowe.removeSession",
+          "command": "zowe.uss.removeSession",
           "when": "never"
         }
       ]
