@@ -2,7 +2,7 @@
 
 This Visual Studio Code (VSC) Extension for Zowe lets you interact with Unix System Services (USS) files that are stored on IBM z/OS mainframes. You can explore file taxonomys and view file contents. Interacting with files using VSC can be more convenient than using command-line interfaces or 3270 emulators.
 
- **Important!** To use the VSC Extension USS for Zowe, you must install Zowe CLI version **`2.0.0`** or later.
+ **Important!** To use the VSC Extension USS for Zowe, you must install Zowe CLI version **`2.14.0`** or later.
 
 The VSC Extension for Zowe is powered by [Zowe CLI](https://zowe.org/home/). The extension demonstrates the potential for plug-ins powered by Zowe.
 
@@ -18,10 +18,10 @@ The VSC Extension for Zowe is powered by [Zowe CLI](https://zowe.org/home/). The
 
 After you install the Zowe extension, meet the following prerequisites:
 
-* [Install Zowe CLI](https://zowe.github.io/docs-site/user-guide/cli-installcli.html) on your PC.
+* [Install Zowe CLI](https://zowe.github.io/docs-site/latest/user-guide/cli-installcli.html) on your PC.
   
-    **Important!** To use the VSC Extension for Zowe, you must install Zowe CLI version `2.0.0` or later.
-* [Create at least one Zowe CLI 'zosmf' profile](https://zowe.github.io/docs-site/user-guide/cli-installcli.html#creating-a-zowe-cli-profile).
+    **Important!** To use the VSC Extension for Zowe, you must install Zowe CLI version `2.14.0` or later.
+* [Create at least one Zowe CLI 'zosmf' profile](https://zowe.github.io/docs-site/latest/getting-started/cli-getting-started.html#using-profiles).
 
 ## Configuration and usage tips
 

@@ -1,11 +1,11 @@
 {
-  "name": "vscode-extension-for-zowe",
-  "displayName": "Zowe",
-  "description": "VS Code extension, powered by Zowe CLI, that streamlines interaction with mainframe data sets",
-  "version": "1.0.2",
+  "name": "vscode-uss-extension-for-zowe",
+  "displayName": "Zowe USS Extewnsion",
+  "description": "VS Code extension, powered by Zowe CLI, that streamlines interaction with mainframe USS Files",
+  "version": "1.0.0",
   "publisher": "Zowe",
   "repository": {
-    "url": "https://github.com/zowe/vscode-extension-for-zowe"
+    "url": "https://github.com/zowe/vscode-uss-extension-for-zowe"
   },
   "icon": "resources/zowe_logo.png",
   "keywords": [
@@ -98,16 +98,6 @@
       ],
       "view/item/context": [
         {
-          "when": "viewItem == ds",
-          "command": "zowe.refreshNode",
-          "group": "inline"
-        },
-        {
-          "when": "viewItem == dsf",
-          "command": "zowe.refreshNode",
-          "group": "inline"
-        },
-        {
           "when": "viewItem == session",
           "command": "zowe.pattern",
           "group": "inline"
@@ -170,8 +160,8 @@
     "vsce": "^1.58.0"
   },
   "dependencies": {
-    "@brightside/core": "^2.9.0",
-    "@brightside/imperative": "^2.0.0",
+    "@brightside/core": "^2.14.0",
+    "@brightside/imperative": "^2.2.0",
     "jsdoc": "^3.5.5",
     "vscode": "^1.1.30"
   },
@@ -202,7 +192,7 @@
     "coverageDirectory": "<rootDir>/results/coverage"
   },
   "jest-html-reporter": {
-    "pageTitle": "Zowe Extension Tests",
+    "pageTitle": "Zowe VSCode USS Extension Tests",
     "outputPath": "results/results.html"
   }
 }
