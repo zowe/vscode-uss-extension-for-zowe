@@ -2,7 +2,7 @@
   "name": "vscode-uss-extension-for-zowe",
   "displayName": "Zowe USS Extewnsion",
   "description": "VS Code extension, powered by Zowe CLI, that streamlines interaction with mainframe USS Files",
-  "version": "1.0.0",
+  "version": "0.1.1",
   "publisher": "Zowe",
   "repository": {
     "url": "https://github.com/zowe/vscode-uss-extension-for-zowe"
@@ -55,7 +55,7 @@
         }
       },
       {
-        "command": "zowe.uss.pattern",
+        "command": "zowe.uss.fullPath",
         "title": "Search Unix System Services (USS) by Entering a Path",
         "icon": {
           "light": "./resources/light/pattern.svg",
@@ -99,7 +99,7 @@
       "view/item/context": [
         {
           "when": "viewItem == uss_session",
-          "command": "zowe.uss.pattern",
+          "command": "zowe.uss.fullPath",
           "group": "inline"
         },
         {
@@ -109,7 +109,7 @@
       ],
       "commandPalette": [
         {
-          "command": "zowe.uss.pattern",
+          "command": "zowe.uss.fullPath",
           "when": "never"
         },
         {

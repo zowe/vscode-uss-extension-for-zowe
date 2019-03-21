@@ -16,7 +16,7 @@ import * as os from "os";
 import * as path from "path";
 import * as vscode from "vscode";
 import { USSTree } from "./USSTree";
-import { ZoweNode } from "./ZoweNode";
+import { ZoweUSSNode } from "./ZoweUSSNode";
 
 // Globals
 export const BRIGHTTEMPFOLDER = path.join(__dirname, "..", "..", "resources", "temp");
@@ -36,7 +36,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     let ussFileProvider: USSTree;
     try {
-        // Initialize file provider with the created session and the selected pattern
+        // Initialize file provider with the created session and the selected fullPath
         ussFileProvider = new USSTree();
         await ussFileProvider.addSession();
 
@@ -57,9 +57,13 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("zowe.uss.addSession", async () => addSession(ussFileProvider));
     vscode.commands.registerCommand("zowe.uss.refreshAll", () => refreshAll(ussFileProvider));
     vscode.commands.registerCommand("zowe.uss.refreshNode", (node) => refreshPS(node));
-    vscode.commands.registerCommand("zowe.uss.pattern", (node) => enterPattern(node, ussFileProvider));
-    vscode.commands.registerCommand("zowe.uss.ZoweNode.open", (node) => open(node));
+    vscode.commands.registerCommand("zowe.uss.fullPath", (node) => enterPattern(node, ussFileProvider));
+    vscode.commands.registerCommand("zowe.uss.ZoweUSSNode.open", (node) => open(node));
     vscode.commands.registerCommand("zowe.uss.removeSession", async (node) => ussFileProvider.deleteSession(node));
+
+    vscode.workspace.onDidSaveTextDocument(async (savedFile) => {
+        await saveFile(savedFile, ussFileProvider);
+    });
 }
 
 
@@ -145,16 +149,16 @@ export async function deactivate() {
 /**
  * Prompts the user for a path, and populates the [TreeView]{@link vscode.TreeView} based on the path
  *
- * @param {ZoweNode} node - The session node
+ * @param {ZoweUSSNode} node - The session node
  * @param {ussTree} ussFileProvider - Current ussTree used to populate the TreeView
  * @returns {Promise<void>}
  */
-export async function enterPattern(node: ZoweNode, ussFileProvider: USSTree) {
+export async function enterPattern(node: ZoweUSSNode, ussFileProvider: USSTree) {
     let remotepath: string;
     // manually entering a search
     const options: vscode.InputBoxOptions = {
         prompt: "Search Unix System Services (USS) by entering a path name starting with a /",
-        value: node.pattern
+        value: node.fullPath
     };
     // get user input
     remotepath = await vscode.window.showInputBox(options);
@@ -169,7 +173,7 @@ export async function enterPattern(node: ZoweNode, ussFileProvider: USSTree) {
     // change label so the treeview updates
     node.label = node.label + " ";
     node.label.trim();
-    node.tooltip = node.pattern = remotepath;
+    node.tooltip = node.fullPath = remotepath;
     node.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     node.dirty = true;
     ussFileProvider.refresh();
@@ -179,34 +183,34 @@ export async function enterPattern(node: ZoweNode, ussFileProvider: USSTree) {
  * Returns the profile for the specified node
  *
  * @export
- * @param {ZoweNode} node
+ * @param {ZoweUSSNode} node
  */
-export function getProfile(node: ZoweNode) {
+export function getProfile(node: ZoweUSSNode) {
     let profile = node.getSessionNode().mLabel;
     return profile;
 }
 
 /**
- * Returns the local file path for the ZoweNode
+ * Returns the local file path for the ZoweUSSNode
  *
  * @export
- * @param {ZoweNode} node
+ * @param {ZoweUSSNode} node
  */
-export function getDocumentFilePath(node: ZoweNode) {
-    return path.join(BRIGHTTEMPFOLDER, "/" + getProfile(node) + "/", node.pattern);
+export function getDocumentFilePath(node: ZoweUSSNode) {
+    return path.join(BRIGHTTEMPFOLDER, "/" + getProfile(node) + "/", node.fullPath + "[" + node.getSessionNode().label.trim() + "]");
 }
 
 /**
  * Downloads and displays a file in a text editor view
  *
- * @param {ZoweNode} node
+ * @param {ZoweUSSNode} node
  */
-export async function open(node: ZoweNode) {
+export async function open(node: ZoweUSSNode) {
     try {
         let label: string;
         switch (node.mParent.contextValue) {
             case ("directory"):
-                label = node.pattern;
+                label = node.fullPath;
                 break;
             case ("uss_session"):
                 label = node.mLabel;
@@ -217,7 +221,7 @@ export async function open(node: ZoweNode) {
         }
         // if local copy exists, open that instead of pulling from mainframe
         if (!fs.existsSync(getDocumentFilePath(node))) {
-            await zowe.Download.ussFile(node.getSession(), node.pattern, {
+            await zowe.Download.ussFile(node.getSession(), node.fullPath, {
                 file: getDocumentFilePath(node)
             });
         }
@@ -244,13 +248,13 @@ export async function refreshAll(ussFileProvider: USSTree) {
 /**
  * Refreshes the passed node with current mainframe data
  *
- * @param {ZoweNode} node - The node which represents the dataset
+ * @param {ZoweUSSNode} node - The node which represents the file
  */
-export async function refreshPS(node: ZoweNode) {
+export async function refreshPS(node: ZoweUSSNode) {
     let label;
     switch (node.mParent.contextValue) {
         case ("directory"):
-            label = node.pattern;
+            label = node.fullPath;
             break;
         case ("uss_session"):
             label = node.mLabel;
@@ -260,7 +264,7 @@ export async function refreshPS(node: ZoweNode) {
             throw Error("refreshPS() called from invalid node.");
     }
     try {
-        await zowe.Download.ussFile(node.getSession(), node.pattern,{
+        await zowe.Download.ussFile(node.getSession(), node.fullPath,{
             file: getDocumentFilePath(node)
         });
         const document = await vscode.workspace.openTextDocument(getDocumentFilePath(node));
@@ -276,5 +280,46 @@ export async function refreshPS(node: ZoweNode) {
         } else {
             vscode.window.showErrorMessage(err);
         }
+    }
+}
+
+/**
+ * Uploads the file to the mainframe
+ *
+ * @export
+ * @param {Session} session - Desired session
+ * @param {vscode.TextDocument} doc - TextDocument that is being saved
+ */
+export async function saveFile(doc: vscode.TextDocument, ussFileProvider: USSTree) {
+    // get session name
+    let sesName = doc.fileName.substring(doc.fileName.indexOf("[") + 1, doc.fileName.lastIndexOf("]"));
+    // if (sesName.includes("[")) {
+    //     // if saving from favorites, sesName might be the favorite node, so extract further
+    //     sesName = sesName.substring(sesName.indexOf("[") + 1, sesName.indexOf("]"));
+    // }
+    let relative = path.relative(BRIGHTTEMPFOLDER + "/" + sesName, doc.fileName);
+    relative = "/" + relative.substring(0, relative.indexOf("["));
+
+    // get session from session name
+    let documentSession;
+    const sesNode = (await ussFileProvider.mSessionNodes.find((child) => child.mLabel === sesName.trim()));
+    if (sesNode) {
+        documentSession = sesNode.getSession();
+    }
+
+    try {
+        const response = await vscode.window.withProgress({
+            location: vscode.ProgressLocation.Notification,
+            title: "Saving file..."
+        }, () => {
+            return zowe.Upload.fileToUSSFile(documentSession, doc.fileName, relative);
+        });
+        if (response.success) {
+            vscode.window.showInformationMessage(response.commandResponse);
+        } else {
+            vscode.window.showErrorMessage(response.commandResponse);
+        }
+    } catch (err) {
+         vscode.window.showErrorMessage(err.message);
     }
 }

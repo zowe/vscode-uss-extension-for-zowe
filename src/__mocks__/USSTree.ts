@@ -10,7 +10,7 @@
 */
 
 import * as vscode from "vscode";
-import { ZoweNode } from "../ZoweNode";
+import { ZoweUSSNode } from "../ZoweUSSNode";
 import { MockMethod } from "../decorators/MockMethod";
 
 /**
@@ -20,35 +20,35 @@ import { MockMethod } from "../decorators/MockMethod";
  * @class USSTree
  * @implements {vscode.TreeDataProvider}
  */
-export class USSTree implements vscode.TreeDataProvider<ZoweNode> {
-    public mSessionNodes: ZoweNode[] = [];
+export class USSTree implements vscode.TreeDataProvider<ZoweUSSNode> {
+    public mSessionNodes: ZoweUSSNode[] = [];
 
     // Event Emitters used to notify subscribers that the refresh event has fired
-    public mOnDidChangeTreeData: vscode.EventEmitter<ZoweNode | undefined> = new vscode.EventEmitter<ZoweNode | undefined>();
-    public readonly onDidChangeTreeData: vscode.Event<ZoweNode | undefined> = this.mOnDidChangeTreeData.event;
+    public mOnDidChangeTreeData: vscode.EventEmitter<ZoweUSSNode | undefined> = new vscode.EventEmitter<ZoweUSSNode | undefined>();
+    public readonly onDidChangeTreeData: vscode.Event<ZoweUSSNode | undefined> = this.mOnDidChangeTreeData.event;
 
     /**
-     * Takes argument of type ZoweNode and returns it converted to a general [TreeItem]
+     * Takes argument of type ZoweUSSNode and returns it converted to a general [TreeItem]
      *
-     * @param {ZoweNode} element - The ZoweNode that is to be converted
+     * @param {ZoweUSSNode} element - The ZoweUSSNode that is to be converted
      * @returns {vscode.TreeItem}
      * @memberof USSTree
      */
     @MockMethod()
-    public getTreeItem(element: ZoweNode): vscode.TreeItem {
+    public getTreeItem(element: ZoweUSSNode): vscode.TreeItem {
         return null;
     }
 
     /**
-     * Takes argument of type ZoweNode and retrieves all of the first level children
+     * Takes argument of type ZoweUSSNode and retrieves all of the first level children
      *
-     * @param {ZoweNode} [element] - The ZoweNode that is to be converted
-     * @returns {Thenable<ZoweNode[]>}
+     * @param {ZoweUSSNode} [element] - The ZoweUSSNode that is to be converted
+     * @returns {Thenable<ZoweUSSNode[]>}
      * @memberof USSTree
      */
     @MockMethod()
-    public getChildren(element?: ZoweNode): Promise<ZoweNode[]> {
-        return new Promise<ZoweNode[]>((resolve) => {
+    public getChildren(element?: ZoweUSSNode): Promise<ZoweUSSNode[]> {
+        return new Promise<ZoweUSSNode[]>((resolve) => {
             return resolve(null);
         });
     }
@@ -66,12 +66,12 @@ export class USSTree implements vscode.TreeDataProvider<ZoweNode> {
     /**
      * Check if the parent exists, and return null if it has no parent
      *
-     * @param {ZoweNode} element - The ZoweNode of which to retrieve the parent
-     * @returns {vscode.ProviderResult<ZoweNode>}
+     * @param {ZoweUSSNode} element - The ZoweUSSNode of which to retrieve the parent
+     * @returns {vscode.ProviderResult<ZoweUSSNode>}
      * @memberof USSTree
      */
     @MockMethod()
-    public getParent(element: ZoweNode): vscode.ProviderResult<ZoweNode> {
+    public getParent(element: ZoweUSSNode): vscode.ProviderResult<ZoweUSSNode> {
         return null;
     }
 
@@ -83,7 +83,7 @@ export class USSTree implements vscode.TreeDataProvider<ZoweNode> {
     }
 
     @MockMethod()
-    public async deleteSession(node?: ZoweNode): Promise<void> {
+    public async deleteSession(node?: ZoweUSSNode): Promise<void> {
         return new Promise<void>((resolve) => {
             return resolve();
         });

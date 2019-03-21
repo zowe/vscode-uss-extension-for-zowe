@@ -17,25 +17,26 @@ import * as vscode from "vscode";
  * A type of TreeItem used to represent sessions and USS directories and files
  *
  * @export
- * @class ZoweNode
+ * @class ZoweUSSNode
  * @extends {vscode.TreeItem}
  */
-export class ZoweNode extends vscode.TreeItem {
+export class ZoweUSSNode extends vscode.TreeItem {
     public command: vscode.Command;
-    public pattern = "";
+    public fullPath = "";
     public dirty = true;
-    public children: ZoweNode[] = [];
+    public children: ZoweUSSNode[] = [];
 
     /**
-     * Creates an instance of ZoweNode
+     * Creates an instance of ZoweUSSNode
      *
      * @param {string} mLabel - Displayed in the [TreeView]
      * @param {vscode.TreeItemCollapsibleState} mCollapsibleState - file/directory
-     * @param {ZoweNode} mParent
+     * @param {ZoweUSSNode} mParent - The parent node
      * @param {Session} session
+     * @param {String} parentPath - The file path of the parent on the server
      */
     constructor(public mLabel: string, public mCollapsibleState: vscode.TreeItemCollapsibleState,
-                public mParent: ZoweNode, private session: Session, private parentPath) {
+                public mParent: ZoweUSSNode, private session: Session, private parentPath: string) {
         super(mLabel, mCollapsibleState);
         if (mCollapsibleState !== vscode.TreeItemCollapsibleState.None) {
             this.contextValue = "directory";
@@ -43,16 +44,16 @@ export class ZoweNode extends vscode.TreeItem {
             this.contextValue = "file";
         }
         if (parentPath)
-            this.pattern = this.tooltip = parentPath+'/'+mLabel;
+            this.fullPath = this.tooltip = parentPath+'/'+mLabel;
     }
 
     /**
-     * Retrieves child nodes of this ZoweNode
+     * Retrieves child nodes of this ZoweUSSNode
      *
-     * @returns {Promise<ZoweNode[]>}
+     * @returns {Promise<ZoweUSSNode[]>}
      */
-    public async getChildren(): Promise<ZoweNode[]> {
-        if ((!this.pattern && this.contextValue === "uss_session") || this.contextValue === "file") {
+    public async getChildren(): Promise<ZoweUSSNode[]> {
+        if ((!this.fullPath && this.contextValue === "uss_session") || this.contextValue === "file") {
             return [];
         }
 
@@ -65,11 +66,11 @@ export class ZoweNode extends vscode.TreeItem {
             throw Error("Invalid node");
         }
 
-        // Gets the directories from the pattern and displays any thrown errors
+        // Gets the directories from the fullPath and displays any thrown errors
         const responses: zowe.IZosFilesResponse[] = [];
         let response: any;
         try {
-            responses.push(await zowe.List.fileList(this.getSession(), this.pattern));
+            responses.push(await zowe.List.fileList(this.getSession(), this.fullPath));
         } catch (err) {
             vscode.window.showErrorMessage(`Retrieving response from zowe.List\n${err}\n`);
             throw Error(`Retrieving response from zowe.List\n${err}\n`);
@@ -87,14 +88,14 @@ export class ZoweNode extends vscode.TreeItem {
             // Loops through all the returned file references members and creates nodes for them
             for (const item of response.apiResponse.items) {
                 if (item.name !== '.' && item.name !== '..') {
-                    // Creates a ZoweNode for a directory
+                    // Creates a ZoweUSSNode for a directory
                     if (item.mode.startsWith('d')) {
-                        const temp = new ZoweNode(item.name, vscode.TreeItemCollapsibleState.Collapsed, this, this.session, this.pattern);
+                        const temp = new ZoweUSSNode(item.name, vscode.TreeItemCollapsibleState.Collapsed, this, null, this.fullPath);
                         elementChildren[temp.label] = temp;
                     } else {
-                        // Creates a ZoweNode for a file
-                        const temp = new ZoweNode(item.name, vscode.TreeItemCollapsibleState.None, this, this.session, this.pattern);
-                        temp.command = {command: "zowe.uss.ZoweNode.open", title: "Open", arguments: [temp]};
+                        // Creates a ZoweUSSNode for a file
+                        const temp = new ZoweUSSNode(item.name, vscode.TreeItemCollapsibleState.None, this, null, this.fullPath);
+                        temp.command = {command: "zowe.uss.ZoweUSSNode.open", title: "Open", arguments: [temp]};
                         elementChildren[temp.label] = temp;
                     }
                 }
@@ -117,11 +118,11 @@ export class ZoweNode extends vscode.TreeItem {
     }
 
     /**
-     * Returs the session node for this node
+     * Returns the session node for this node
      *
-     * @returns {ZoweNode}
+     * @returns {ZoweUSSNode}
      */
-    public getSessionNode(): ZoweNode {
+    public getSessionNode(): ZoweUSSNode {
         return this.session ? this : this.mParent.getSessionNode();
     }
 }
