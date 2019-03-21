@@ -17,7 +17,7 @@ jest.mock("Session");
 import { Session } from "@brightside/imperative";
 import * as vscode from "vscode";
 import { USSTree } from "../src/USSTree";
-import { ZoweNode } from "../src/ZoweNode";
+import { ZoweUSSNode } from "../src/ZoweUSSNode";
 
 describe("Unit Tests (Jest)", async () => {
     // Globals
@@ -29,14 +29,14 @@ describe("Unit Tests (Jest)", async () => {
         type: "basic",
     });
     const testTree = new USSTree();
-    testTree.mSessionNodes.push(new ZoweNode("testSess", vscode.TreeItemCollapsibleState.Collapsed, null, session, null));
+    testTree.mSessionNodes.push(new ZoweUSSNode("testSess", vscode.TreeItemCollapsibleState.Collapsed, null, session, null));
     testTree.mSessionNodes[0].contextValue = "uss_session";
-    testTree.mSessionNodes[0].pattern = "test";
+    testTree.mSessionNodes[0].fullPath = "test";
     /*************************************************************************************************************
-     * Creates an ZoweNode and checks that its members are all initialized by the constructor
+     * Creates an ZoweUSSNode and checks that its members are all initialized by the constructor
      *************************************************************************************************************/
-    it("Testing that the ZoweNode is defined", async () => {
-        const testNode = new ZoweNode("/u", vscode.TreeItemCollapsibleState.None, null, session,null);
+    it("Testing that the ZoweUSSNode is defined", async () => {
+        const testNode = new ZoweUSSNode("/u", vscode.TreeItemCollapsibleState.None, null, session,null);
         testNode.contextValue = "uss_session";
 
         expect(testNode.label).toBeDefined();
@@ -57,23 +57,23 @@ describe("Unit Tests (Jest)", async () => {
      * Calls getTreeItem with sample element and checks the return is vscode.TreeItem
      *************************************************************************************************************/
     it("Testing the getTreeItem method", async () => {
-        const sampleElement = new ZoweNode("/u/myUser", vscode.TreeItemCollapsibleState.None,
+        const sampleElement = new ZoweUSSNode("/u/myUser", vscode.TreeItemCollapsibleState.None,
             null, null, null);
         expect(testTree.getTreeItem(sampleElement)).toBeInstanceOf(vscode.TreeItem);
     });
 
     /*************************************************************************************************************
-     * Creates sample list of ZoweNodes and checks that ussTree.getChildren() returns correct array of children
+     * Creates sample list of ZoweUSSNodes and checks that ussTree.getChildren() returns correct array of children
      *************************************************************************************************************/
     it("Tests that getChildren returns valid list of elements", async () => {
         // Waiting until we populate rootChildren with what getChildren return
         const rootChildren = await testTree.getChildren();
         // Creating a rootNode
         const sessNode = [
-            new ZoweNode("testSess", vscode.TreeItemCollapsibleState.Collapsed, null, session, null),
+            new ZoweUSSNode("testSess", vscode.TreeItemCollapsibleState.Collapsed, null, session, null),
         ];
         sessNode[0].contextValue = "uss_session";
-        sessNode[0].pattern = "test";
+        sessNode[0].fullPath = "test";
 
         // Checking that the rootChildren are what they are expected to be
         expect(sessNode).toEqual(rootChildren);
@@ -93,16 +93,16 @@ describe("Unit Tests (Jest)", async () => {
 
     /*************************************************************************************************************
      * Creates a child with a rootNode as parent and checks that a getParent() call returns null.
-     * Also creates a child with a non-rootNode parent and checks that getParent() returns the correct ZoweNode
+     * Also creates a child with a non-rootNode parent and checks that getParent() returns the correct ZoweUSSNode
      *************************************************************************************************************/
-    it("Tests that getParent returns the correct ZoweNode when called on a non-rootNode ZoweNode", async () => {
-        // Creating fake datasets and uss members to test
-        const sampleChild1: ZoweNode = new ZoweNode("/u/myUser/zowe1", vscode.TreeItemCollapsibleState.None,
+    it("Tests that getParent returns the correct ZoweUSSNode when called on a non-rootNode ZoweUSSNode", async () => {
+        // Creating fake directories and uss members to test
+        const sampleChild1: ZoweUSSNode = new ZoweUSSNode("/u/myUser/zowe1", vscode.TreeItemCollapsibleState.None,
             testTree.mSessionNodes[0], session, null);
         const parent1 = testTree.getParent(sampleChild1);
 
-        // Creating fake datasets and uss members to test
-        const sampleChild2: ZoweNode = new ZoweNode("/u/myUser/zowe2", vscode.TreeItemCollapsibleState.None,
+        // Creating fake directories and uss members to test
+        const sampleChild2: ZoweUSSNode = new ZoweUSSNode("/u/myUser/zowe2", vscode.TreeItemCollapsibleState.None,
             sampleChild1, null, null);
         const parent2 = testTree.getParent(sampleChild2);
 
@@ -115,15 +115,15 @@ describe("Unit Tests (Jest)", async () => {
     });
 
     /*************************************************************************************************************
-     * Tests that getChildren() method returns an array of all child nodes of passed ZoweNode
+     * Tests that getChildren() method returns an array of all child nodes of passed ZoweUSSNode
      *************************************************************************************************************/
-    it("Testing that getChildren returns the correct ZoweNodes when called and passed an element of type ZoweNode<session>", async () => {
+    it("Testing that getChildren returns the correct ZoweUSSNodes when called and passed an element of type ZoweUSSNode<session>", async () => {
 
         // Waiting until we populate rootChildren with what getChildren return
         const sessChildren = await testTree.getChildren(testTree.mSessionNodes[0]);
         // Creating fake datasets and uss members to test
-        const sampleChildren: ZoweNode[] = [
-            new ZoweNode("aDir", vscode.TreeItemCollapsibleState.Collapsed, testTree.mSessionNodes[0], null, null),
+        const sampleChildren: ZoweUSSNode[] = [
+            new ZoweUSSNode("aDir", vscode.TreeItemCollapsibleState.Collapsed, testTree.mSessionNodes[0], null, null),
         ];
 
         // Checking that the rootChildren are what they are expected to be
@@ -131,16 +131,16 @@ describe("Unit Tests (Jest)", async () => {
     });
 
     // /*************************************************************************************************************
-    //  * Tests that getChildren() method returns an array of all child nodes of passed ZoweNode
+    //  * Tests that getChildren() method returns an array of all child nodes of passed ZoweUSSNode
     //  *************************************************************************************************************/
-    // it("Testing that getChildren returns the correct ZoweNodes when called and passed an element of type ZoweNode<favorite>", async () => {
+    // it("Testing that getChildren returns the correct ZoweUSSNodes when called and passed an element of type ZoweUSSNode<favorite>", async () => {
 
     //     // Waiting until we populate rootChildren with what getChildren return
-    //     testTree.mFavorites.push(new ZoweNode("/u/myUser", vscode.TreeItemCollapsibleState.None, testTree.mSessionNodes[0], null, null));
+    //     testTree.mFavorites.push(new ZoweUSSNode("/u/myUser", vscode.TreeItemCollapsibleState.None, testTree.mSessionNodes[0], null, null));
     //     const favChildren = await testTree.getChildren(testTree.mSessionNodes[0]);
     //     // Creating fake datasets and uss members to test
-    //     const sampleChildren: ZoweNode[] = [
-    //         new ZoweNode("/u/myUser", vscode.TreeItemCollapsibleState.None, testTree.mSessionNodes[0], null, null)
+    //     const sampleChildren: ZoweUSSNode[] = [
+    //         new ZoweUSSNode("/u/myUser", vscode.TreeItemCollapsibleState.None, testTree.mSessionNodes[0], null, null)
     //     ];
 
     //     // Checking that the rootChildren are what they are expected to be
@@ -148,22 +148,22 @@ describe("Unit Tests (Jest)", async () => {
     // });
 
     /*************************************************************************************************************
-     * Tests that getChildren() method returns an array of all child nodes of passed ZoweNode
+     * Tests that getChildren() method returns an array of all child nodes of passed ZoweUSSNode
      *************************************************************************************************************/
-    it("Testing that getChildren returns the correct ZoweNodes when called and passed an element of type ZoweNode<directory>", async () => {
-        const directory = new ZoweNode("/u", vscode.TreeItemCollapsibleState.Collapsed, testTree.mSessionNodes[0], null, null);
+    it("Testing that getChildren returns the correct ZoweUSSNodes when called and passed an element of type ZoweUSSNode<directory>", async () => {
+        const directory = new ZoweUSSNode("/u", vscode.TreeItemCollapsibleState.Collapsed, testTree.mSessionNodes[0], null, null);
 
         // Waiting until we populate rootChildren with what getChildren return
         const dirChildren = await testTree.getChildren(directory);
         // Creating fake directory and files to test
-        const sampleChildren: ZoweNode[] = [
-            new ZoweNode("myFile.txt", vscode.TreeItemCollapsibleState.None, directory, null, null),
+        const sampleChildren: ZoweUSSNode[] = [
+            new ZoweUSSNode("myFile.txt", vscode.TreeItemCollapsibleState.None, directory, null, null),
         ];
-        sampleChildren[0].command = { command: "zowe.uss.ZoweNode.open", title: "", arguments: [sampleChildren[0]] };
+        sampleChildren[0].command = { command: "zowe.uss.ZoweUSSNode.open", title: "", arguments: [sampleChildren[0]] };
 
         // Checking that the rootChildren are what they are expected to be
         expect(dirChildren[1].mLabel).toEqual(sampleChildren[0].mLabel);
-        //expect(dirChildren[1].command).toEqual("zowe.uss.ZoweNode.open");
+        //expect(dirChildren[1].command).toEqual("zowe.uss.ZoweUSSNode.open");
     });
 
     /*************************************************************************************************************

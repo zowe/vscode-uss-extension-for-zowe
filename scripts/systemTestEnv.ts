@@ -38,7 +38,7 @@ export async function cleanupSystemTestEnvironment() {
 }
 
 function deleteAllFiles(name: string) {
-  Logger.getConsoleLogger().info(`Deleting Dataset: ${name}`);
+  Logger.getConsoleLogger().info(`Deleting files: ${name}`);
   return Delete.ussFile(session, name, true);
 }
 

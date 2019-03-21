@@ -14,7 +14,7 @@ import { CliProfileManager } from "@brightside/imperative";
 import * as os from "os";
 import * as path from "path";
 import * as vscode from "vscode";
-import { ZoweNode } from "./ZoweNode";
+import { ZoweUSSNode } from "./ZoweUSSNode";
 
 /**
  * A tree that contains nodes of sessions and USS Files
@@ -23,34 +23,34 @@ import { ZoweNode } from "./ZoweNode";
  * @class USSTree
  * @implements {vscode.TreeDataProvider}
  */
-export class USSTree implements vscode.TreeDataProvider<ZoweNode> {
-    public mSessionNodes: ZoweNode[];
+export class USSTree implements vscode.TreeDataProvider<ZoweUSSNode> {
+    public mSessionNodes: ZoweUSSNode[];
 
     // Event Emitters used to notify subscribers that the refresh event has fired
-    public mOnDidChangeTreeData: vscode.EventEmitter<ZoweNode | undefined> = new vscode.EventEmitter<ZoweNode | undefined>();
-    public readonly onDidChangeTreeData: vscode.Event<ZoweNode | undefined> = this.mOnDidChangeTreeData.event;
+    public mOnDidChangeTreeData: vscode.EventEmitter<ZoweUSSNode | undefined> = new vscode.EventEmitter<ZoweUSSNode | undefined>();
+    public readonly onDidChangeTreeData: vscode.Event<ZoweUSSNode | undefined> = this.mOnDidChangeTreeData.event;
 
     constructor() {
         this.mSessionNodes = [];
     }
 
     /**
-     * Takes argument of type ZoweNode and returns it converted to a general [TreeItem]
+     * Takes argument of type ZoweUSSNode and returns it converted to a general [TreeItem]
      *
-     * @param {ZoweNode} element
+     * @param {ZoweUSSNode} element
      * @returns {vscode.TreeItem}
      */
-    public getTreeItem(element: ZoweNode): vscode.TreeItem {
+    public getTreeItem(element: ZoweUSSNode): vscode.TreeItem {
         return element;
     }
 
     /**
-     * Takes argument of type ZoweNode and retrieves all of the first level children
+     * Takes argument of type ZoweUSSNode and retrieves all of the first level children
      *
-     * @param {ZoweNode} [element] - Optional parameter; if not passed, returns root session nodes
-     * @returns {ZoweNode[] | Promise<ZoweNode[]>}
+     * @param {ZoweUSSNode} [element] - Optional parameter; if not passed, returns root session nodes
+     * @returns {ZoweUSSNode[] | Promise<ZoweUSSNode[]>}
      */
-    public getChildren(element?: ZoweNode): ZoweNode[] | Promise<ZoweNode[]> {
+    public getChildren(element?: ZoweUSSNode): ZoweUSSNode[] | Promise<ZoweUSSNode[]> {
         if (element) {
             return element.getChildren();
         }
@@ -68,10 +68,10 @@ export class USSTree implements vscode.TreeDataProvider<ZoweNode> {
     /**
      * Returns the parent node or null if it has no parent
      *
-     * @param {ZoweNode} element
-     * @returns {vscode.ProviderResult<ZoweNode>}
+     * @param {ZoweUSSNode} element
+     * @returns {vscode.ProviderResult<ZoweUSSNode>}
      */
-    public getParent(element: ZoweNode): vscode.ProviderResult<ZoweNode> {
+    public getParent(element: ZoweUSSNode): vscode.ProviderResult<ZoweUSSNode> {
         return element.mParent;
     }
 
@@ -96,8 +96,8 @@ export class USSTree implements vscode.TreeDataProvider<ZoweNode> {
         // Uses loaded profile to create a zosmf session with brightside
         const session = zowe.ZosmfSession.createBasicZosmfSession(zosmfProfile.profile);
 
-        // Creates ZoweNode to track new session and pushes it to mSessionNodes
-        const node = new ZoweNode(zosmfProfile.name, vscode.TreeItemCollapsibleState.Collapsed, null, session, "");
+        // Creates ZoweUSSNode to track new session and pushes it to mSessionNodes
+        const node = new ZoweUSSNode(zosmfProfile.name, vscode.TreeItemCollapsibleState.Collapsed, null, session, "");
         node.contextValue = "uss_session";
         this.mSessionNodes.push(node);
         this.refresh();
@@ -106,9 +106,9 @@ export class USSTree implements vscode.TreeDataProvider<ZoweNode> {
     /**
      * Removes a session from the list in the uss files tree
      *
-     * @param {ZoweNode} [node]
+     * @param {ZoweUSSNode} [node]
      */
-    public deleteSession(node: ZoweNode) {
+    public deleteSession(node: ZoweUSSNode) {
         // Removes deleted session from mSessionNodes
         this.mSessionNodes = this.mSessionNodes.filter((tempNode) => tempNode.label !== node.label);
         this.refresh();
