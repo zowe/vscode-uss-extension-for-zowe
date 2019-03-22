@@ -2,8 +2,6 @@
 
 This Visual Studio Code (VSC) Extension for Zowe lets you interact with Unix System Services (USS) files that are stored on IBM z/OS mainframes. You can explore file taxonomys and view file contents. Interacting with files using VSC can be more convenient than using command-line interfaces or 3270 emulators.
 
- **Important!** To use the VSC Extension USS for Zowe, you must install Zowe CLI version **`2.14.0`** or later.
-
 The VSC Extension for Zowe is powered by [Zowe CLI](https://zowe.org/home/). The extension demonstrates the potential for plug-ins powered by Zowe.
 
 This extension is currently under development and subject to improvement based upon feedback. For example it is likely to be considered to be merged with the Dataset VSCode extension.
